@@ -1,0 +1,50 @@
+{% extends "port.html" %}
+{% load custom_tags %}
+{% block table %}
+<table>
+<tbody>
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            Sector
+        </th>
+        <th>
+            Room
+        </th>
+        <th>
+            IP
+        </th>
+        <th>
+            MAC
+        </th>
+        <th>
+            Last seen
+        </th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>
+            <a href="http://lithium.{{ ip|lithium }}/hosts/{{ client.username }}/" target="_blank">{{ client.username }}</a>
+        </td>
+        <td>
+            {{ client.sector }}
+        </td>
+        <td>
+            {{ client.room }}
+        </td>
+        <td>
+            {{ client.ip }}
+        </td>
+        <td>
+            {{ client.mac }}
+        </td>
+        <td>
+            {{ client.last_seen }}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

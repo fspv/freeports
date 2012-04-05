@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block menu %}
+    <a href="/admin/">Admin</a>
+{% endblock %}
+{% block level1 %}&rarr; <a href="/extended/">Extended</a>{% endblock %}
+{% block level2 %}&rarr; Sector {{ sector }}{% endblock %}
+{% block content %}
+<div id="content">
+    {% include sector %}
+    <img src="/images/{{ sector }}.gif" usemap="#{{ sector }}" alt="{{ sector }}" />
+</div>
+{% endblock %}

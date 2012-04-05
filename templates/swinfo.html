@@ -1,0 +1,44 @@
+{% extends "switch.html" %}
+{% load custom_tags %}
+{% block level1 %}<li id="current">&rarr; <a href="/switch-{{ switch.sw }}/">Switch {{ switch.name }}</a></li>{% endblock %}
+{% block info %}Information{% endblock %}
+{% block content %}
+<div id="content">
+    <div id="info">
+    <table>
+    <tbody>
+        <tr><th class="delimiter" colspan="2">User</th><tr>
+    {% if check %}
+        <tr><th>Имя:</th><td>{{ contacts.name }}</td></tr>
+        <tr><th>Отчество:</th><td>{{ contacts.middle_name }}</td></tr>
+        <tr><th>Фамилия:</th><td>{{ contacts.last_name }}</td></tr>
+        <tr><th>Возраст:</th><td>{{ contacts.age }}</td></tr>
+        <tr><th>Пол:</th><td>{{ contacts.gender|gender }}</td></tr>
+        <tr><th>Телефон:</th><td>{{ contacts.phone }}</td></tr>
+        <tr><th>Профиль в lithium:</th><td><a href="http://lithium.{{ ip|lithium }}/users/{{ contacts.profile }}/" target="_blank">{{ contacts.profile }}</a></td></tr>
+        <tr><th>Комментарий:</th><td>{{ contacts.comment }}</td></tr>
+    {% else %}
+        <tr><td colspan="2">Contacts not found, please add something about owner of this room</td></tr>
+    {% endif %}
+        <tr><th class="delimiter" colspan="2">Switch</th><tr>
+        <tr><th>Имя свитча на карте:</th><td> {{ switch.name }} </td></tr>
+        <tr><th>Сектор:</th><td> {% if switch.sector != "NULL" %}{{ switch.sector }}{% else %}A{% endif %}</td></tr>
+        <tr><th>Комната:</th><td> {{ switch.room }} </td></tr>
+        <!--<tr><th>Тупой:</th><td> {{ switch.stupid|yesno }} </td></tr>-->
+        <tr><th>Модель:</th><td> {{ switch.model }} </td></tr>
+        <tr><th>Левая/правая:</th><td> {{ switch.side|leftright }} </td></tr>
+        <tr><th>Parent:</th><td>
+            {% if switch.parent %}
+            <a href="/switch-{{ switch.parent }}/">{{ switch.parent|getSwNameByID }}</a>
+            {% else %}
+            None
+            {% endif %}</td></tr>
+        <tr><th>Даунлинк до этого свитча включен в порт:</th><td> {{ switch.parent_port }} </td></tr>
+        <tr><th>Количество портов:</th><td> {{ switch.ports_count }} </td></tr>
+        <tr><th>IP:</th><td> {{ switch.ip }} </td></tr>
+        <tr><th>Обновлен:</th><td> {{ switch.updated|timetohuman }} </td></tr>
+        <!--<tr><th>Deleted:</th><td> {{ switch.deleted|yesno }}-->
+    </tbody>
+    </table>
+</div>
+{% endblock %}

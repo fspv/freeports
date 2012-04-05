@@ -1,0 +1,85 @@
+{% extends "switch.html" %}
+{% load custom_tags %}
+{% block level2 %}
+<div id="subnavigation">
+    <li><a href="{{ request.path }}?registered=1&period={{ period }}">Registered</a></li>
+    <li><a href="{{ request.path }}?registered=0&period={{ period }}">Unregistered</a></li>
+</div>
+{% endblock %}
+{% block table %}
+<div id="users">
+<table>
+<tbody>
+{% ifequal registered '1'  %}
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            Sector
+        </th>
+        <th>
+            Room
+        </th>
+        <th>
+            IP
+        </th>
+        <th>
+            MAC
+        </th>
+        <th>
+            Last seen
+        </th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>
+            <a href="http://lithium.{{ ip|lithium }}/hosts/{{ client.username }}/" target="_blank">{{ client.username }}</a>
+        </td>
+        <td>
+            {{ client.sector }}
+        </td>
+        <td>
+            {{ client.room }}
+        </td>
+        <td>
+            {{ client.ip }}
+        </td>
+        <td>
+            {{ client.mac }}
+        </td>
+        <td>
+            {{ client.last_seen }}
+        </td>
+    </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            MAC
+        </th>
+        <th>
+            Last seen
+        </th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>
+            {{ client.username }}
+        </td>
+        <td>
+            {{ client.mac }}
+        </td>
+        <td>
+            {{ client.last_seen }}
+        </td>
+    </tr>
+    {% endfor %}
+{% endifequal %}
+</tbody>
+</table>
+</div>
+{% endblock %}

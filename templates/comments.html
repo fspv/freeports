@@ -1,0 +1,26 @@
+{% extends "switch.html" %}
+{% load custom_tags %}
+{% block level1 %}<li>&rarr; <a href="/switch-{{ swid }}/">Switch {{ swid|getSwNameByID }}</a></li>{% endblock %}
+{% block level2 %}<li id="current">&rarr; Comments</li>{% endblock %}
+{% block menu %}
+<ul>
+    <li>
+        {% block commentadd %}<a href="/switch-{{ swid }}/comments/add/">Add</a>{% endblock %}
+    </li>
+<ul>
+{% endblock %}
+{% block content %}
+<div id="content">
+    <div id="comments_container">
+    {% if comments %}{% else %}No comments yet{% endif %}
+    {% for comment in comments %}
+        <div id="comment">
+            <span class="name">{{ comment.name }} </span> <span class="time">({{ comment.time }})</span>:
+            <span class="delete"><a href="/switch-{{ swid }}/comments/{{ comment.id }}/delete/">Delete</a></span>
+            <span class="edit"><a href="/switch-{{ swid }}/comments/{{ comment.id }}/edit/">Edit</a></span>
+            <div class="delimiter">&nbsp;</div><span class="comment_comment">{{ comment.comment }}</span>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

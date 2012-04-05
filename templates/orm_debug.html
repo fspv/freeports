@@ -1,0 +1,37 @@
+<style type="text/css">
+{% if pygments_css %}
+{{ pygments_css }}
+{% endif %}
+#orm-debug-body {
+    display: none;
+    color: #e0e0e0;
+    background-color: #101010;
+    font-size: 15px;
+    line-height: 16px;
+    padding: 1px 1em 1em 1em;
+}
+#orm-debug-body p {
+    margin: 0;
+}
+#orm-debug-body pre {
+    margin: 0;
+}
+#orm-debug-body .query-info {
+    margin-top: 1em;
+    margin-bottom: 0.2em;
+}
+</style>
+<div id="orm-debug-head">
+    <a href="#" onclick="document.getElementById('orm-debug-body').style.display = 'block'">debug</a>
+    sql count: {{ query_count }}, sql time: {{ query_time }}
+</div>
+<div id="orm-debug-body">
+{% for query in queries %}
+<div class="code">
+    <div class="query-info">time: {{ query.time }}</div>
+    {% if not pygments_installed %}<pre>{% endif %}
+    {{ query.sql|safe|linebreaks }}
+    {% if not pygments_installed %}</pre>{% endif %}
+</div>
+{% endfor %}
+</div>

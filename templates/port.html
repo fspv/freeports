@@ -1,0 +1,15 @@
+{% extends "switch.html" %}
+{% block level1 %}<li>&rarr; <a href="/switch-{{ switch.sw }}/">Switch {{ switch.name }}</a></li>{% endblock %}
+{% block level2 %}<li id="current">&rarr; Port {{ port }}</li>{% endblock %}
+{% block level3 %}
+<div id="subnavigation">
+    <li><a href="{{ request.path }}?registered=1&period={{ period }}">Registered</a></li>
+    <li><a href="{{ request.path }}?registered=0&period={{ period }}">Unregistered</a></li>
+</div>
+{% endblock %}
+{% block content %}
+    {% include "slider.html" %}
+    <div id="users">
+    {% block table %}{% endblock %}
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "admin/main.html" %}
+{% block content %}
+<div id="content">
+    <div id="addswitch">
+    <form action="/admin/switches/add/" name="switch" method="POST">
+    <table>
+    <tbody>
+    <tr><th class="delimiter" colspan="2">Add new stupid switch</th></tr>
+    {% for field in switch_form %}
+        <tr>
+            <th>
+                {{ field.label_tag }}:
+            </th>
+            <td>
+                {{ field }}
+                {{ field.errors }}
+            </td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td class="submit" colspan="2"><input type="submit" name="switch" value="Add switch" /></td>
+    </form>
+    </tbody>
+    </table>
+    </form>
+</div>
+</div>
+{% endblock %}

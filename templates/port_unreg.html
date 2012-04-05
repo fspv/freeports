@@ -1,0 +1,31 @@
+{% extends "port.html" %}
+{% block table %}
+<table>
+<tbody>
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            MAC
+        </th>
+        <th>
+            Last seen
+        </th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>
+            Unregistered
+        </td>
+        <td>
+            {{ client.mac }}
+        </td>
+        <td>
+            {{ client.last_seen }}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

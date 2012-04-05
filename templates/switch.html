@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+{% block level1 %}<li id="current">&rarr; Switch {{ switch.name }}</li>{% endblock %}
+{% block menu %}
+<ul>
+    <li>
+        {% block info %}<a href="/switch-{{ switch.sw }}/info/">Information</a>{% endblock %}
+    </li>
+    <li>
+        {% block edit %}<a href="/switch-{{ switch.sw }}/edit/">Edit</a>{% endblock %}
+    </li>
+    <li>
+        {% block comments %}<a href="/switch-{{ switch.sw }}/comments/">Comments</a>({{ switch.sw|comments_number }}){% endblock %}
+    </li>
+<ul>
+{% endblock %}
+{% block content %}
+    <div id="content">
+    {% include "slider.html" %}
+    {% block table %}{% endblock %}
+    </div>
+{% endblock %}
