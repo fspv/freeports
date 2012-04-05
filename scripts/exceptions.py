@@ -1,2 +1,0 @@
-class SectorError(Exception):
-    pass
