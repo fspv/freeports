@@ -71,6 +71,9 @@ def secToHuman(seconds,arg="hms"):
         return "%2d min. %2d sec." % (minutes, seconds)
     return "%2d hours %2d min. %2d sec." % (hours, minutes, seconds)
 @register.filter
+def secSpent(value):
+    return str(int(time.time()-float(value)))
+@register.filter
 def getSwNameByID(value):
     try:
         switch = Map.objects.get(sw=value)

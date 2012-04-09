@@ -1,8 +1,11 @@
 {% extends "admin/main.html" %}
+{% block level1 %}&rarr; <a href="/admin/">Admin</a>{% endblock %}
+{% block level2 %}&rarr; <a href="/admin/switches/">Switches</a>{% endblock %}
+{% block level3 %}&rarr; Add{% endblock %}
 {% block content %}
 <div id="content">
     <div id="addswitch">
-    <form action="/admin/switches/add/" name="switch" method="POST">
+    <form action="/admin/switches/add/" name="switch" method="POST">{% csrf_token %}
     <table>
     <tbody>
     <tr><th class="delimiter" colspan="2">Add new stupid switch</th></tr>

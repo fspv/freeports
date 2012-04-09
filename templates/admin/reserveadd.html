@@ -1,8 +1,11 @@
 {% extends "admin/main.html" %}
+{% block level1 %}&rarr; <a href="/admin/">Admin</a>{% endblock %}
+{% block level2 %}&rarr; <a href="/admin/reserves/">Reserves</a>{% endblock %}
+{% block level3 %}&rarr; Add{% endblock %}
 {% block content %}
 <div id="content">
     <div id="addreserve">
-    <form action="/admin/reserves/add/" name="reserve" method="POST">
+    <form action="/admin/reserves/add/" name="reserve" method="POST">{% csrf_token %}
     <table>
     <tbody>
     <tr><th class="delimiter" colspan="2">Add new reserve link</th></tr>

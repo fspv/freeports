@@ -3,16 +3,16 @@
 {% block level1 %}<li id="current">&rarr; Switch {{ switch.name }}</li>{% endblock %}
 {% block menu %}
 <ul>
-    <li>
-        {% block info %}<a href="/switch-{{ switch.sw }}/info/">Information</a>{% endblock %}
+    <li{% block info_act %}{% endblock %}>
+        <a href="/switch-{{ switch.sw }}/info/">Information</a>
+    </li>
+    <li{% block edit_act %}{% endblock %}>
+        <a href="/switch-{{ switch.sw }}/edit/">Edit</a>
     </li>
     <li>
-        {% block edit %}<a href="/switch-{{ switch.sw }}/edit/">Edit</a>{% endblock %}
+        <a href="/switch-{{ switch.sw }}/comments/">Comments</a>({{ switch.sw|comments_number }})
     </li>
-    <li>
-        {% block comments %}<a href="/switch-{{ switch.sw }}/comments/">Comments</a>({{ switch.sw|comments_number }}){% endblock %}
-    </li>
-<ul>
+</ul>
 {% endblock %}
 {% block content %}
     <div id="content">

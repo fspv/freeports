@@ -7,7 +7,7 @@
 {% block content %}
 <div id="content">
 <div id="edit">
-    <form action="/switch-{{ swid }}/comments/add/" name="comments" method="POST">
+    <form action="/switch-{{ swid }}/comments/add/" name="comments" method="POST">{% csrf_token %}
     <table>
     <tbody>
     <tr><th class="delimiter" colspan="2">Add new comment</th></tr>

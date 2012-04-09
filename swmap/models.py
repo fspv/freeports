@@ -7,13 +7,18 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 #re_sector = re.compile('^[ABVGDEJIK]{1,1}$')
 validate_sector = RegexValidator('^[ABVGDEJIK]{1,1}$',u'Неправильно указано название сектора, это должна быть латинская буква A, B, V, G, D, E или J')
+validate_sector_ru = RegexValidator(u'^[АБВГДЕЖ]{1,1}$',u'Неправильно указано название сектора, это должна быть русская буква А, Б, В, Г, Д или Ж')
 validate_swname = RegexValidator('^[a-zA-Z0-9]*$',u'Неправильно указано название свитча, оно может состоять из латинских букв в любом регистре и цифр')
 validate_model = RegexValidator('^[a-zA-Z0-9 -/]*$',u'Неправильно указана модель свитча, это значение может состоять из латинских букв (в любом регистре), цифр, пробелов и символов "-", "/", "\\"')
 validate_room = RegexValidator('^[0-9]{3,4}$',u'Неправильно указан номер комнаты , он может состоять из 3х или 4х цифр')
 validate_name = RegexValidator(u'^[A-ZА-Я][a-zA-ZА-Яа-я \-\.]*$',u'Неправильно указано имя/фамилия/отчество, оно должно начинаться с большой буквы, и может состоять из русских и латинских букв в любом регистре, пробелов, и символов "." и "-"')
 validate_comments_name = validate_name
 validate_phone = RegexValidator('^\+7[0-9]{10}$',u'Неправильно указан телефон, он должен иметь формат +79991234567, скобочки, тире и пробелы не допускаются')
-validate_username = RegexValidator('^[a-z]{1,1}[a-z0-9]{3,}$',u'Неправильно указано имя пользователя, выдержка из signup.local:  Это имя должно состоять из строчных латинских букв, цифр и подчёркиваний, быть не короче 4 символов и начинаться с буквы.')
+validate_username = RegexValidator('^[a-z]{1,1}[a-z0-9_-]{3,}$',u'Неправильно указано имя пользователя, выдержка из signup.local:  Это имя должно состоять из строчных латинских букв, цифр и подчёркиваний, быть не короче 4 символов и начинаться с буквы.')
+validate_hostname = RegexValidator('^[a-z0-9-]{3,}$',u'Имя хоста может состоять из латинских букв, в нижнем регистре, цифр и тире. Должно быть указано как минимум 3 символа.')
+validate_ip = RegexValidator("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",u'Неправильный формат ip-адреса. Пример: 127.0.0.1')
+validate_mac = RegexValidator('([a-fA-F0-9]{2}[:]?){6}',u'Неправильный формат mac-адреса. Пример: 9e:ed:34:5d:30:34')
+validate_port = RegexValidator('^[1-9][0-9]{0,1}$',u'Номер порта - это 1 или 2 цифры. Номер порта не может начинаться с нуля')
 def ports_number():
     choices = ((2,2),)
     for i in [5,8,12,16,20,22,24,26,28,44,48]:
@@ -53,7 +58,7 @@ class CommentsForm(ModelForm):
             'comment': Textarea(attrs={'cols': 80, 'rows': 20}),
         }
 def swchoise():
-    switches = Map.objects.all().order_by("name")
+    switches = Map.objects.filter(stupid=0).order_by("name")
     choices = ((switches[0].sw,switches[0].name),)
     for switch in switches:
         if switch == switches[0]:
@@ -64,15 +69,19 @@ def swchoise():
 class Clients(models.Model):
     #id = models.PositiveIntegerField(primary_key=True)
     sw = models.PositiveIntegerField()
-    username = models.CharField(max_length=50,blank=True,verbose_name="Имя в lithium")
-    sector = models.CharField(max_length=2,blank=True,verbose_name="Сектор")
-    room = models.CharField(max_length=10,blank=True,verbose_name="Комната")
-    ip = models.CharField(max_length=30,blank=True,verbose_name="IP")
-    mac = models.CharField(max_length=60,verbose_name="MAC")
+    username = models.CharField(max_length=50,blank=True,verbose_name="Имя компьютера",validators=[validate_hostname])
+    sector = models.CharField(max_length=2,blank=True,verbose_name="Сектор",validators=[validate_sector_ru])
+    room = models.CharField(max_length=10,blank=True,verbose_name="Комната",validators=[validate_room])
+    ip = models.CharField(max_length=30,blank=True,verbose_name="IP",validators=[validate_ip])
+    mac = models.CharField(max_length=60,blank=True,verbose_name="MAC",validators=[validate_mac])
     port = models.PositiveIntegerField(verbose_name="Порт")
     last_seen = models.PositiveIntegerField(verbose_name="Был в сети")
     class Meta:
         db_table = 'clients'
+class ClientsSearchForm(ModelForm):
+    class Meta:
+        model = Clients
+        fields = ('username','sector','room','ip','mac',)
 class Current(models.Model):
     sw = models.PositiveIntegerField()
     port = models.PositiveIntegerField()

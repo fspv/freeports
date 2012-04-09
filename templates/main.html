@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block menu %}
 <ul>
-    <li><a href="/faq/">FAQ</a></li>
-    <li><a href="/admin/">Admin</a></li>
+    <li{% block search_act %}{% endblock %}><a href="/search/">Search</a></li>
+    <li{% block faq_act %}{% endblock %}><a href="/faq/">F.A.Q</a></li>
+    <li{% block admin_act %}{% endblock %}><a href="/admin/">Admin</a></li>
 </ul>
 {% endblock %}
 {% block level1 %}

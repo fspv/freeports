@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 {% load custom_tags %}
+{% block level1 %}&rarr; <a href="/admin/">Admin</a>{% endblock %}
+{% block level2 %}&rarr; Reserves{% endblock %}
 {% block menu %}
-    <a href="/admin/reserves/add/">Add</a>
+<ul>
+    <li>
+        <a href="/admin/reserves/add/">Add</a>
+    </li>
+</ul>
 {% endblock %}
 {% block content %}
-<table border="1" width="100%">
+<div id="content">
+<table>
 <tbody>
     <tr>
         <th>
@@ -56,4 +63,5 @@
     {% endfor %}
 </tbody>
 </table>
+</div>
 {% endblock %}

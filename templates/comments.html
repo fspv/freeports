@@ -7,16 +7,16 @@
     <li>
         {% block commentadd %}<a href="/switch-{{ swid }}/comments/add/">Add</a>{% endblock %}
     </li>
-<ul>
+</ul>
 {% endblock %}
 {% block content %}
 <div id="content">
     <div id="comments_container">
-    {% if comments %}{% else %}No comments yet{% endif %}
+    {% if comments %}{% else %}<div id="comment" style="text-align:center;">No comments yet</div>{% endif %}
     {% for comment in comments %}
         <div id="comment">
             <span class="name">{{ comment.name }} </span> <span class="time">({{ comment.time }})</span>:
-            <span class="delete"><a href="/switch-{{ swid }}/comments/{{ comment.id }}/delete/">Delete</a></span>
+            <span class="delete"><a href="/switch-{{ swid }}/comments/{{ comment.id }}/delete/" OnClick="if (! confirm('Комментарий будет удален навсегда!')) { return false; }">Delete</a></span>
             <span class="edit"><a href="/switch-{{ swid }}/comments/{{ comment.id }}/edit/">Edit</a></span>
             <div class="delimiter">&nbsp;</div><span class="comment_comment">{{ comment.comment }}</span>
         </div>

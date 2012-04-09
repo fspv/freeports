@@ -3,7 +3,6 @@ import config
 import pygraphviz as pgv
 import MySQLdb
 import os
-
 # Создаем новый граф G
 G = pgv.AGraph(rankdir = 'LR',name='G',overlap = 'false')
 
@@ -23,10 +22,21 @@ conn = MySQLdb.connect(\
                 db = config.mysql_dbname\
 )
 db = conn.cursor(MySQLdb.cursors.DictCursor)
-db.execute('SELECT sw,name,stupid,sector,parent,parent_port,uplink_port FROM map WHERE deleted=0;')
+db.execute('SELECT sw,name,stupid,sector,parent,parent_port,uplink_port,state FROM map WHERE deleted=0;')
 switches = db.fetchall()
 db.execute('SELECT * FROM reserves WHERE deleted=0;')
 reserves = db.fetchall()
+def check_state(switch):
+    db.execute('SELECT * FROM map WHERE sw='+str(switch)+';')
+    sw = db.fetchall()[0]
+    #print sw['state']
+    if sw['state'] == 0 or sw['state'] == -1:
+        return 1
+    else:
+        if sw['parent']:
+            return check_state(sw['parent'])
+        else:
+            return 0
 # Каждый свитч добавляется на граф
 for row in switches:
 	# Добавляем свитч в кластер, если он принадлежит какому-нибудь из секторов
@@ -40,11 +50,14 @@ for row in switches:
     node.attr['style'] = 'filled'
     node.attr['label'] = row["name"]
     node.attr['URL'] = config.website_location+'switch-'+str(row['sw'])+'/'
-    #print row['name']+" deleted"+row['deleted']
-    if row['stupid'] == 0 or row['stupid'] == 'NULL':
-        node.attr['fillcolor'] = 'cyan'
+    if check_state(row['sw']):
+        node.attr['fillcolor'] = 'yellow'
     else:
-        node.attr['fillcolor'] = 'deeppink'
+        #print row['name']+" deleted"+row['deleted']
+        if row['stupid'] == 0 or row['stupid'] == 'NULL':
+            node.attr['fillcolor'] = 'cyan'
+        else:
+            node.attr['fillcolor'] = 'deeppink'
     # Если имеется родительский свитч - добавляем ребро графа    
     if row["parent"]:
         G.add_edge(row["parent"],row["sw"])
@@ -63,6 +76,7 @@ for row in switches:
             link_state = min(int(parent_port_state),int(uplink_port_state))
         elif parent_port_state:
             link_state = int(parent_port_state)
+        states={'-1':'disabled','0':'down','10':'10Mbps','100':'100Mbps','1000':'1Gbps'}
         # Форматирование ребра в зависимости от состояния линка
         edge.attr['fontsize'] = '8'
         edge.attr['fontcolor'] = '#0000ff'
@@ -78,6 +92,12 @@ for row in switches:
             pass
         elif link_state == 1000:
             edge.attr['style'] = 'bold'
+        if str(link_state) != str(row['state']):
+            print 'UPDATE map SET state='+str(link_state)+' WHERE sw='+str(row['sw'])+';'
+            db.execute('UPDATE map SET state='+str(link_state)+' WHERE sw='+str(row['sw'])+';')
+            conn.commit()
+            if str(row['stupid'])=='1':
+                os.system('python2 '+config.map_dir+'scripts/google-sms.py --title="Link '+states[str(link_state)]+'" --location="Uplink at '+row['name']+'"')
 for reserve in reserves:
     G.add_edge(reserve['sw1'],reserve['sw2'])
     edge = G.get_edge(reserve['sw1'],reserve['sw2'])
@@ -86,9 +106,6 @@ for reserve in reserves:
     edge.attr['fontsize'] = '12'
     edge.attr['fontcolor'] = '#0000ff'
     edge.attr['constraint'] = 'false'
-    #edge.attr['overlap'] = 'prism1000'
-    #edge.attr['label'] = str(reserve['sw1_port'])+'-'+str(reserve['sw2_port'])
-# Рисуем картинку, генерируем html-карту
 G.draw(config.map_dir+"static/images/big_swmap.png",prog="dot")
 G.write("/tmp/big_swmap.dot")
 os.system('dot /tmp/big_swmap.dot -Tgif -o '+config.map_dir+'static/images/big_swmap.gif -Tcmapx -o '+config.map_dir+'templates/big_swmap.html')

@@ -48,7 +48,8 @@ with warnings.catch_warnings():
 					    uplink_port SMALLINT(2) UNSIGNED,\
 					    ip TINYTEXT,\
 					    updated TINYTEXT,\
-					    deleted SMALLINT(1)\
+					    deleted SMALLINT(1),\
+                        state SMALLINT\
 	    );')
     db.execute('CREATE TABLE IF NOT EXISTS clients(\
 						id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,\

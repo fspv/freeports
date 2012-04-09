@@ -1,11 +1,11 @@
 {% extends "switch.html" %}
 {% load custom_tags %}
 {% block level1 %}<li id="current">&rarr; <a href="/switch-{{ switch.sw }}/">Switch {{ switch.name }}</a></li>{% endblock %}
-{% block edit %}Edit{% endblock %}
+{% block edit_act %} class="active"{% endblock %}
 {% block content %}
 <div id="content">
 <div id="edit">
-    <form action="/switch-{{ switch.sw }}/edit/" name="contacts" method="POST">
+    <form action="/switch-{{ switch.sw }}/edit/" name="contacts" method="POST">{% csrf_token %}
     <table>
     <tbody>
     <tr><th class="delimiter" colspan="2">User info</th></tr>
@@ -23,7 +23,7 @@
     <tr>
         <td class="submit" colspan="2"><input type="submit" name="contacts" value="Update user" /></td>
     </form>
-    <form action="/switch-{{ switch.sw }}/edit/" name="switch" method="post">
+    <form action="/switch-{{ switch.sw }}/edit/" name="switch" method="post">{% csrf_token %}
     <tr><th class="delimiter" colspan="2">Switch info</th></tr>
     {% for field in switch_form %}
         <tr>

@@ -1,5 +1,6 @@
 {% extends "switch.html" %}
 {% load custom_tags %}
+{% block level1 %}<li id="current">&rarr; Switch {{ switch.name }} <span class="updated">(Updated {{ switch.updated|secToHuman }} ago)</span></li>{% endblock %}
 {% block content %}
 <div id="content">
     {% include 'slider.html' %}
@@ -41,7 +42,7 @@
         {% else %}
             {% if switch.sw|downlink:port.port %}
                 <td colspan="3">
-                    <a href="/switch-{{ switch.sw|downlink:port.port }}/">Downlink to {{ switch.sw|downlink:port.port|getSwNameByID }}</a>
+                    Downlink to <a href="/switch-{{ switch.sw|downlink:port.port }}/">{{ switch.sw|downlink:port.port|getSwNameByID }}</a>
                 </td>
             {% else %}
                 <td{% if port.reg == 0 %} class="no_reg_macs"{% endif %}>

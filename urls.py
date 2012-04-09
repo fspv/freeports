@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
-from freeports.big_swmap import big_swmap
-from freeports.views import switch, port, admin, admin_swlist,admin_reservelist,admin_reservedel,admin_reserverestore,admin_reserveadd,admin_swadd,admin_swadd,admin_swdel,admin_swrestore,swinfo,swedit,comments,comment_add,comment_delete,comment_edit,ext_map,ext_map_sector,faq
+from freeports.views import big_swmap
+from freeports.views import switch, port, admin, admin_swlist,admin_reservelist,admin_reservedel,admin_reserverestore,admin_reserveadd,admin_swadd,admin_swadd,admin_swdel,admin_swrestore,swinfo,swedit,comments,comment_add,comment_delete,comment_edit,ext_map,ext_map_sector,faq,search
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -16,6 +16,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     ('^$',big_swmap),
+    ('^search/{0,1}$',search),
+    ( r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    ( r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login' ),
     ('^switch-([0-9]*)/{0,1}$',switch),
     ('^switch-(?P<switch>\d{1,6})/port-(?P<port>\d{1,2})/{0,1}$',port),
     ('^switch-([0-9]*)/info/{0,1}$',swinfo),
@@ -24,6 +27,7 @@ urlpatterns = patterns('',
     ('^switch-([0-9]*)/comments/add/{0,1}$',comment_add),
     ('^switch-(?P<switch>\d{1,6})/comments/(?P<comment>\d{1,6})/delete/{0,1}$',comment_delete),
     ('^switch-(?P<switch>\d{1,6})/comments/(?P<comment>\d{1,6})/edit/{0,1}$',comment_edit),
+    ('^accounts/profile/{0,1}$',admin),
     ('^admin/{0,1}$',admin),
     ('^admin/switches/{0,1}$',admin_swlist),
     ('^admin/reserves/{0,1}$',admin_reservelist),

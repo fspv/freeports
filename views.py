@@ -1,14 +1,36 @@
 # -*- coding: utf-8 -*-
+from django.core.context_processors import csrf
 from django.http import HttpResponse
-from swmap.models import Map, Clients, Current, Contacts, ContactsForm, StupidMapForm, AddStupidMapForm, SmartMapForm, Comments, CommentsForm, Reserves, ReservesForm
+from swmap.models import Map, Clients, Current, Contacts, ContactsForm, StupidMapForm, AddStupidMapForm, SmartMapForm, Comments, CommentsForm, Reserves, ReservesForm, ClientsSearchForm
 from django.db.models import Q,Max
 from time import time
 import re
 from django.db import connection
 from django.shortcuts import render_to_response,get_object_or_404,get_list_or_404,redirect
 from tools import parse_get, port_clients
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 def big_swmap(request):
     return render_to_response('main.html')
+def search(request):
+    results = ''
+    ind = 1
+    #query = request.GET.get()
+    if len(request.GET):
+        search_form = ClientsSearchForm(request.GET)
+        if search_form.is_valid():
+            if len(request.GET['username']):
+                results = Clients.objects.filter(username__icontains=request.GET['username']).order_by('last_seen')
+            elif len(request.GET['sector']) and request.GET['room']:
+                results = Clients.objects.filter(sector__iexact=request.GET['sector'],room=request.GET['room'])
+            elif len(request.GET['ip']):
+                results = Clients.objects.filter(ip__exact=request.GET['ip'])
+            elif len(request.GET['mac']):
+                results = Clients.objects.filter(mac__iexact=request.GET['mac'])
+    else:
+        search_form = ClientsSearchForm()
+        ind = 0
+    return render_to_response('search.html',{'search_form':search_form,'results':results,'request':request.GET,'ip':request.META['REMOTE_ADDR']})
 def switch(request,offset):
     swinfo = get_object_or_404(Map,sw=offset)
     ports = []
@@ -23,7 +45,6 @@ def switch(request,offset):
             current = Current.objects.get(sw=swinfo.sw,port=i)
             ports.append({'port':i,'reg':reg,'unreg':unreg,'total':(reg+unreg), 'state':current.port_state, 'updated':current.updated, 'uplink':(1 if i==swinfo.uplink_port else 0)})
         return render_to_response('smart_switch.html',{'switch':swinfo,'ports':ports,'period':last_seen,'request':request})
-
 def port(request,switch,port):
     swinfo = Map.objects.filter(sw=switch)[0]
     last_seen = parse_get(request)['last_seen']
@@ -33,11 +54,14 @@ def port(request,switch,port):
         return render_to_response('port_reg.html',values)
     else:
         return render_to_response('port_unreg.html',values)
+@login_required
 def admin(request):
     return render_to_response('admin/main.html')
+@login_required
 def admin_swlist(request):
     switches = Map.objects.filter(stupid='1')
     return render_to_response('admin/swlist.html',{'switches':switches})
+@login_required
 def admin_swadd(request):
     switch_form = ''
     switch = Map(sw=(Map.objects.all().order_by('-sw')[0].sw+1))
@@ -50,7 +74,10 @@ def admin_swadd(request):
             return redirect('/admin/switches/')
     else:
         switch_form = AddStupidMapForm()
-    return render_to_response('admin/swadd.html',{'switch_form':switch_form})
+    values = {'switch_form':switch_form}
+    values.update(csrf(request))
+    return render_to_response('admin/swadd.html',values)
+@login_required
 def admin_swdel(request,switch):
     sw = get_object_or_404(Map, sw=switch)
     try:
@@ -59,9 +86,11 @@ def admin_swdel(request,switch):
         return redirect('/admin/switches/')
     except:
         return render_to_response('hui.html')
+@login_required
 def admin_reservelist(request):
     reserves = Reserves.objects.all()
     return render_to_response('admin/reservelist.html',{'reserves':reserves})
+@login_required
 def admin_reserveadd(request):
     reserve_form = ''
     reserve = Reserves()
@@ -73,7 +102,10 @@ def admin_reserveadd(request):
             return redirect('/admin/reserves/')
     else:
         reserve_form = ReservesForm()
-    return render_to_response('admin/reserveadd.html',{'reserve_form':reserve_form})
+    values = {'reserve_form':reserve_form}
+    values.update(csrf(request))
+    return render_to_response('admin/reserveadd.html',values)
+@login_required
 def admin_swdel(request,switch):
     sw = get_object_or_404(Map, sw=switch)
     try:
@@ -82,6 +114,7 @@ def admin_swdel(request,switch):
         return redirect('/admin/switches/')
     except:
         return render_to_response('hui.html')
+@login_required
 def admin_reservedel(request,reserveid):
     reserve = get_object_or_404(Reserves,id=reserveid)
     try:
@@ -91,6 +124,7 @@ def admin_reservedel(request,reserveid):
         return redirect('/admin/reserves/')
     except:
         return render_to_response('hui.html')
+@login_required
 def admin_reserverestore(request,reserveid):
     reserve = get_object_or_404(Reserves,id=reserveid)
     try:
@@ -99,6 +133,7 @@ def admin_reserverestore(request,reserveid):
         return redirect('/admin/reserves/')
     except:
         return render_to_response('hui.html')
+@login_required
 def admin_swrestore(request,switch):
     sw = get_object_or_404(Map, sw=switch)
     try:
@@ -154,7 +189,9 @@ def swedit(request,offset):
             switch_form = SmartMapForm(instance=switch)
     except Map.DoesNotExist:
         switch_form = "Something strange is going there, report to site administrator via email"
-    return render_to_response('swedit.html',{'switch':swinfo,'contacts_form':contacts_form,'switch_form':switch_form})
+    values = {'switch':swinfo,'contacts_form':contacts_form,'switch_form':switch_form}
+    values.update(csrf(request))
+    return render_to_response('swedit.html',values)
 def comments(request,offset):
     comments = ''
     try:
@@ -173,7 +210,10 @@ def comment_add(request,offset):
             return redirect('/switch-'+str(swid)+"/comments/")
     else:
         comment_form = CommentsForm()
-    return render_to_response('comment_add.html',{'swid':swid,'comment_form':comment_form})
+    values = {'swid':swid,'comment_form':comment_form}
+    values.update(csrf(request))
+    return render_to_response('comment_add.html',values)
+@login_required
 def comment_delete(request,switch,comment):
     try:
         comment = Comments(id=comment)
@@ -190,10 +230,14 @@ def comment_edit(request, switch, comment):
         if comment_form.is_valid():
             comment_form.save()
             return redirect('/switch-'+str(swid)+"/comments/")
-        return render_to_response('comment_edit.html',{'swid':switch,'commid':commid,'comment_form':comment_form})
+        values = {'swid':switch,'commid':commid,'comment_form':comment_form}
+        values.update(csrf(request))
+        return render_to_response('comment_edit.html',values)
     else:
         comment_form = CommentsForm(instance = comment)
-        return render_to_response('comment_edit.html',{'swid':switch,'commid':commid,'comment_form':comment_form})
+        values = {'swid':switch,'commid':commid,'comment_form':comment_form}
+        values.update(csrf(request))
+        return render_to_response('comment_edit.html',values)
 def ext_map(request):
     return render_to_response('extended.html')
 def ext_map_sector(request,offset):
