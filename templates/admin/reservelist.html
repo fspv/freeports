@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+{% block level1 %}&rarr; <a href="/admin/">Admin</a>{% endblock %}
+{% block level2 %}&rarr; Reserves{% endblock %}
+{% block menu %}
+<ul>
+    <li>
+        <a href="/admin/reserves/add/">Add</a>
+    </li>
+</ul>
+{% endblock %}
+{% block content %}
+<div id="content">
+<table>
+<tbody>
+    <tr>
+        <th>
+            Source
+        </th>
+        <th>
+            Source port
+        </th>
+        <th>
+            Destination
+        </th>
+        <th>
+            Destination port
+        </th>
+        <th>
+            Deleted
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    {% for reserve in reserves %}
+        <tr>
+            <td>
+                <a href="/switch-{{ reserve.sw1 }}/">{{ reserve.sw1|getSwNameByID }}</a>
+            </td>
+            <td>
+                {{ reserve.sw1_port }}
+            </td>
+            <td>
+                <a href="/switch-{{ reserve.sw2 }}/">{{ reserve.sw2|getSwNameByID }}</a>
+            </td>
+            <td>
+                {{ reserve.sw2_port }}
+            </td>
+            <td>
+                {{ reserve.deleted|yesno }}
+            </td>
+            <td>
+                {% if reserve.deleted %}
+                <a href="/admin/reserves/{{ reserve.id }}/restore/">Restore</a>
+                {% else %}
+                <a href="/admin/reserves/{{ reserve.id }}/delete/">Delete</a>
+                {% endif %}
+                <!--<a href="/admin/reserves/{{ reserve.id }}/edit/">Edit</a>-->
+            </td>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}

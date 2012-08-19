@@ -1,0 +1,90 @@
+{% extends "main.html" %}
+{% load custom_tags %}
+{% block level1 %}&rarr; Search{% endblock %}
+{% block search_act %} class="active"{% endblock %}
+{% block content %}
+<div id="content">
+    <form action="/search/" name="search" method="GET">{% csrf_token %}
+    <table>
+    <tbody>
+    <tr><th class="delimiter" colspan="2">Условия поиска</th></tr>
+    {% for field in search_form %}
+        <tr>
+            <th>
+                {{ field.label_tag }}:
+            </th>
+            <td>
+                {{ field }}
+                {{ field.errors }}
+            </td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td class="submit" colspan="2"><input type="submit" value="Поиск" /></td>
+    </tbody>
+    </table>
+    </form>
+    <br />
+    {% if results|length %}
+    <table>
+    <tbody>
+        <tr>
+            <th>
+                Switch
+            </th>
+            <th>
+                Port
+            </th>
+            <th>
+                Hostname
+            </th>
+            <th>
+                Sector
+            </th>
+            <th>
+                Room
+            </th>
+            <th>
+                IP
+            </th>
+            <th>
+                MAC
+            </th>
+            <th>
+                Last seen
+            </th>
+        {% for user in results %}
+        <tr>
+            <td>
+                <a href="/switch-{{ user.sw }}/">{{ user.sw|getSwNameByID }}</a>
+            </td>
+            <td>
+                <a href="/switch-{{ user.sw }}/port-{{ user.port }}">{{ user.port }}</a>
+            </td>
+            <td>
+                <a href="http://lithium.{{ ip|lithium }}/hosts/{{ user.username }}/" target="_blank">{{ user.username }}</a>
+            </td>
+            <td>
+                {{ user.sector }}
+            </td>
+            <td>
+                {{ user.room }}
+            </td>
+            <td>
+                {{ user.ip }}
+            </td>
+            <td>
+                {{ user.mac }}
+            </td>
+            <td>
+                 {{ user.last_seen }} days
+            </td>        
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+        {% if ind %}По заданным критериям ничего не найдено{% endif %}
+    {% endif %}
+</div>
+{% endblock %}

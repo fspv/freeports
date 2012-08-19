@@ -1,0 +1,31 @@
+{% extends "admin/main.html" %}
+{% block level1 %}&rarr; <a href="/admin/">Admin</a>{% endblock %}
+{% block level2 %}&rarr; <a href="/admin/reserves/">Reserves</a>{% endblock %}
+{% block level3 %}&rarr; Add{% endblock %}
+{% block content %}
+<div id="content">
+    <div id="addreserve">
+    <form action="/admin/reserves/add/" name="reserve" method="POST">{% csrf_token %}
+    <table>
+    <tbody>
+    <tr><th class="delimiter" colspan="2">Add new reserve link</th></tr>
+    {% for field in reserve_form %}
+        <tr>
+            <th>
+                {{ field.label_tag }}:
+            </th>
+            <td>
+                {{ field }}
+                {{ field.errors }}
+            </td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td class="submit" colspan="2"><input type="submit" name="reserve" value="Add reserve link" /></td>
+    </form>
+    </tbody>
+    </table>
+    </form>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "port.html" %}
+{% block unreg_act %} class="active"{% endblock %}
+{% block table %}
+<table>
+<tbody>
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            MAC
+        </th>
+        <th>
+            Last seen
+        </th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>
+            Unregistered
+        </td>
+        <td>
+            {{ client.mac }}
+        </td>
+        <td>
+            {{ client.last_seen }} days
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% load custom_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>freeports{% block title1 %}{% endblock %}{% block title2 %}{% endblock %}{% block title3 %}{% endblock %}</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script>
+        window.dhx_globalImgPath = "/js/codebase/imgs/";
+    </script>
+    <script  src="/js/codebase/dhtmlxcommon.js"></script>
+    <script  src="/js/codebase/dhtmlxslider.js"></script>
+    <script  src="/js/codebase/ext/dhtmlxslider_start.js"></script>
+    <link rel="STYLESHEET" type="text/css" href="/js/codebase/dhtmlxslider.css">
+    <script  src="/js/slider.js"></script>
+</head>
+<body>
+    <header>
+        <div id="navigation">
+	    <h1>{% block sitename %}<a href="/">freeports</a>{% endblock %}</h1>
+        <ul>
+            {% block level1 %}{% endblock %}
+            {% block level2 %}{% endblock %}
+            {% block level3 %}{% endblock %}
+            {% block level5 %}{% endblock %}
+        </ul>
+        </div>
+        <div id="menu">
+            {% block menu %}{% endblock %}
+        </div>
+        <div id="endheader">
+        </div>
+    </header>
+	{% block content %}{% endblock %}
+	{% block footer %}
+    <div>&nbsp;</div>
+	<div class="delimiter">&nbsp;</div>
+	<footer>
+        freeports 2.0 &copy; 2012 <br />
+        <a href="mailto:pv.safronov@gmail.com">Safronov Pavel</a>
+        <br />
+	</footer>
+	{% endblock %}
+</body>
+</html>

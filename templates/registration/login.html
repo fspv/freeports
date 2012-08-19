@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+{% block level1 %}&rarr; Log in{% endblock %}
+{% block content %}
+<div id="content">
+  {% if form.errors %}
+    <p class="error">Сожалеем, вы неправильно ввели логин или пароль</p>
+  {% endif %}
+
+  <form action='.' method='post'>{% csrf_token %}
+    <table id="login">
+    <tbody>
+    <tr>
+        <th>
+            <label for="username">Логин:</label>
+        </th>
+        <td>
+            <input type="text" name="username" value="" id="username"><br />
+        </td>
+    </tr>
+        <th>
+            <label for="password">Пароль:</label>
+        </th>
+        <td>
+            <input type="password" name="password" value="" id="password"><br>
+        </td>
+    <tr>
+        <td colspan="2">
+            <input type="submit" value="login" />
+        </td>
+    </tr>
+    </tbody>
+    </table>
+    <input type="hidden" name="next" value="{{ next|escape }}" />
+  </form>
+</div>
+{% endblock %}

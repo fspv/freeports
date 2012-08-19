@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+{% block level1 %}&rarr; Admin{% endblock %}
+{% block admin_act %} class="active"{% endblock %}
+{% block content %}
+<div id="content">
+	<a href="/admin/switches/">Edit stupid switches</a><br />
+    <a href="/admin/reserves/">Edit reserve links</a><br />
+    <a href="/accounts/logout/">Log out</a>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% load custom_tags %}
+<div id="slider">
+<form method="get" id="periodslider">
+    <div id="sliderSliderContainer"></div>
+    <div id="sliderInputContainer">
+        <span id="approxMonth">~{{ period|months }} months</span>
+        <input type="text" name="period" id="sliderInput" style="width:50px" value="{{ period }}">
+        <input type="hidden" name="registered" value="{{ registered }}">
+        <input type="submit" value="Show">
+    </div>
+    <div style="clear:both"></div>
+<form>
+</div>

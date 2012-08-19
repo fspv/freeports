@@ -1,0 +1,35 @@
+{% extends "switch.html" %}
+{% load custom_tags %}
+{% block title1 %}::{{ switch_id|getSwNameByID }}{% endblock %}
+{% block title2 %}::Comments::Add{% endblock %}
+{% block level1 %}<li>&rarr; <a href="/switch-{{ switch_id }}/">Switch {{ switch_id|getSwNameByID }}</a></li>{% endblock %}
+{% block level2 %}<li>&rarr; <a href="/switch-{{ switch_id }}/comments/">Comments</a></li>{% endblock %}
+{% block level3 %}<li id="current">&rarr; Add</li>{% endblock %}
+{% block comments %}Comments{% endblock %}
+{% block content %}
+<div id="content">
+<div id="edit">
+    <form action="/switch-{{ switch_id }}/comments/add/" name="comments" method="POST">{% csrf_token %}
+    <table>
+    <tbody>
+    <tr><th class="delimiter" colspan="2">Add new comment</th></tr>
+    {% for field in form %}
+        <tr>
+            <th>
+                {{ field.label_tag }}:
+            </th>
+            <td>
+                {{ field }}
+                {{ field.errors }}
+            </td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td class="submit" colspan="2"><input type="submit" name="comments" value="Add comment" /></td>
+    </form>
+    </tbody>
+    </table>
+    </form>
+</div>
+</div>
+{% endblock %}

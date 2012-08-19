@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+{% block level1 %}&rarr; <a href="/admin/">Admin</a>{% endblock %}
+{% block level2 %}&rarr; Switches{% endblock %}
+{% block menu %}
+<ul>
+    <li>
+        <a href="/admin/switches/add/">Add</a>
+    </li>
+</ul>
+{% endblock %}
+{% block content %}
+<div id="content">
+<table>
+<tbody>
+    <tr>
+        <th>
+            Switch name
+        </th>
+        <th>
+            Sector
+        </th>
+        <th>
+            Room
+        </th>
+        <th>
+            left/right
+        </th>
+        <th>
+            Parent switch
+        </th>
+        <th>
+            Parent switch port
+        </th>
+        <th>
+            Ports count
+        </th>
+        <th>
+            Deleted
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    {% for switch in switches %}
+        <tr>
+            <td>
+                <a href="/switch-{{ switch.sw }}/">{{ switch.name }}</a>
+            </td>
+            <td>
+                {{ switch.sector }}
+            </td>
+            <td>
+                {{ switch.room }}
+            </td>
+            <td>
+                {{ switch.side|leftright }}
+            </td>
+            <td>
+               {{ switch.parent|getSwNameByID }}
+            </td> 
+            <td>
+                {{ switch.parent_port}}
+            </td>
+            <td>
+                {{ switch.ports_count }}
+            </td>
+            <td>
+                {{ switch.deleted|yesno }}
+            </td>
+            <td>
+                {% if switch.deleted %}
+                <a href="/admin/switches/{{ switch.sw }}/restore/">Restore</a>
+                {% else %}
+                <a href="/admin/switches/{{ switch.sw }}/delete/">Delete</a>
+                {% endif %}
+            </td>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>        
+</form>
+</div>
+{% endblock %}

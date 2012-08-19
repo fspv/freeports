@@ -1,0 +1,86 @@
+{% extends "switch.html" %}
+{% load custom_tags %}
+{% block level1 %}<li id="current">&rarr; Switch {{ switch.name }} <span class="updated">(Updated {{ switch.updated|secToHuman }} ago)</span></li>{% endblock %}
+{% block content %}
+<div id="content">
+    {% include 'slider.html' %}
+    {% block table %}
+    <div id="ports">
+    <table>
+    <tr>
+        <th>
+            Port
+        </th>
+        <th>
+            MACs (registered)
+        </th>
+        <th>
+            MACs (unregistered)
+        </th>
+        <th>
+            MACs (total)
+        </th>
+        <th>
+            Port state
+        </th>
+        <th>
+            Updated
+        </th>
+    </tr>
+    {% for port in ports %}
+    <tr>
+        <td>
+            {{ port.port }} 
+        </td>
+        {% ifequal port.port switch.uplink_port %}
+        <td colspan="3">
+            Uplink
+        </td>
+        {% else %}
+            {% if switch.sw|downlink:port.port %}
+                <td colspan="3">
+                    Downlink to <a href="/switch-{{ switch.sw|downlink:port.port }}/">{{ switch.sw|downlink:port.port|getSwNameByID }}</a>
+                </td>
+            {% else %}
+                <td{% if port.reg == 0 %} class="no_reg_macs"{% endif %}>
+                    <a href="/switch-{{ switch.sw }}/port-{{ port.port }}/?period={{ period }}&registered=1">{{ port.reg }}</a>
+                </td>
+                <td{% if port.unreg == 0 %} class="no_reg_macs"{% endif %}>
+                    <a href="/switch-{{ switch.sw }}/port-{{ port.port }}/?period={{ period }}&registered=0">{{ port.unreg }}</a>
+                </td>
+                <td{% if port.total == 0 %} class="no_reg_macs"{% endif %}>
+                    {{ port.total }}
+                </td>
+            {% endif %}
+        {% endifequal %}
+        {% ifequal port.state -1 %}
+            <td class="port_disabled">
+                disabled
+            </td>
+        {% else %}
+            {% ifequal port.state 1000 %}
+                <td class="port_gigabit">
+                    1Gbps
+                </td>
+            {% else %}
+                {% ifequal port.state 0 %}
+                    <td class="port_down">
+                        down
+                    </td>
+                {% else %}
+                    <td class="port_{{ port.state }}mbps">
+                        {{ port.state }}Mbps
+                    </td>
+                {% endifequal %}
+            {% endifequal %}
+        {% endifequal %}
+        <td>
+                {{ port.updated|secToHuman }}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}
