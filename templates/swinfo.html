@@ -1,5 +1,6 @@
 {% extends "switch.html" %}
 {% load custom_tags %}
+{% block title2 %}::Info{% endblock %}
 {% block level1 %}<li id="current">&rarr; <a href="/switch-{{ switch.sw }}/">Switch {{ switch.name }}</a></li>{% endblock %}
 {% block info_act %} class="active"{% endblock %}
 {% block content %}

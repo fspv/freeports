@@ -1,10 +1,10 @@
 {% load custom_tags %}
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>freeports</title>
+    <title>freeports{% block title1 %}{% endblock %}{% block title2 %}{% endblock %}{% block title3 %}{% endblock %}</title>
     <link rel="stylesheet" href="/css/style.css" type="text/css" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script>
         window.dhx_globalImgPath = "/js/codebase/imgs/";
     </script>
@@ -15,7 +15,7 @@
     <script  src="/js/slider.js"></script>
 </head>
 <body>
-    <div id="head">
+    <header>
         <div id="navigation">
 	    <h1>{% block sitename %}<a href="/">freeports</a>{% endblock %}</h1>
         <ul>
@@ -28,17 +28,18 @@
         <div id="menu">
             {% block menu %}{% endblock %}
         </div>
-        <div id="endhead">
+        <div id="endheader">
         </div>
-    </div>
+    </header>
 	{% block content %}{% endblock %}
 	{% block footer %}
     <div>&nbsp;</div>
 	<div class="delimiter">&nbsp;</div>
-	<div id="footer">
+	<footer>
         freeports 2.0 &copy; 2012 <br />
-		<a href="mailto:pv.safronov@gmail.com">Safronov Pavel</a> 
-	</div>
+        <a href="mailto:pv.safronov@gmail.com">Safronov Pavel</a>
+        <br />
+	</footer>
 	{% endblock %}
 </body>
 </html>

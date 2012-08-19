@@ -1,6 +1,13 @@
 from django.conf.urls.defaults import patterns, include, url
 from freeports.views import big_swmap
-from freeports.views import switch, port, admin, admin_swlist,admin_reservelist,admin_reservedel,admin_reserverestore,admin_reserveadd,admin_swadd,admin_swadd,admin_swdel,admin_swrestore,swinfo,swedit,comments,comment_add,comment_delete,comment_edit,ext_map,ext_map_sector,faq,search
+from freeports.views import switch, port, admin, admin_swlist,\
+                            admin_reservelist,admin_reservedel,\
+                            admin_reserverestore,admin_reserveadd,\
+                            admin_swadd,admin_swadd,admin_swdel,\
+                            admin_swrestore,swinfo,swedit,\
+                            ext_map,ext_map_sector,search,\
+                            CommentList, CommentAdd, CommentEdit, CommentDelete
+from django.views.generic import TemplateView
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -23,10 +30,11 @@ urlpatterns = patterns('',
     ('^switch-(?P<switch>\d{1,6})/port-(?P<port>\d{1,2})/{0,1}$',port),
     ('^switch-([0-9]*)/info/{0,1}$',swinfo),
     ('^switch-([0-9]*)/edit/{0,1}$',swedit),
-    ('^switch-([0-9]*)/comments/{0,1}$',comments),
-    ('^switch-([0-9]*)/comments/add/{0,1}$',comment_add),
-    ('^switch-(?P<switch>\d{1,6})/comments/(?P<comment>\d{1,6})/delete/{0,1}$',comment_delete),
-    ('^switch-(?P<switch>\d{1,6})/comments/(?P<comment>\d{1,6})/edit/{0,1}$',comment_edit),
+    #('^switch-(?P<swid>[0-9]*)/comments/{0,1}$',comments),
+    ('^switch-(?P<switch_id>[0-9]*)/comments/{0,1}$',CommentList.as_view()),
+    ('^switch-(?P<switch_id>[0-9]*)/comments/add/{0,1}$',CommentAdd.as_view()),
+    ('^switch-(?P<switch_id>\d{1,6})/comments/(?P<comment_id>\d{1,6})/delete/{0,1}$',CommentDelete.as_view()),
+    ('^switch-(?P<switch_id>\d{1,6})/comments/(?P<comment_id>\d{1,6})/edit/{0,1}$',CommentEdit.as_view()),
     ('^accounts/profile/{0,1}$',admin),
     ('^admin/{0,1}$',admin),
     ('^admin/switches/{0,1}$',admin_swlist),
@@ -38,7 +46,7 @@ urlpatterns = patterns('',
     ('^admin/reserves/(?P<reserveid>\d{1,6})/restore/{0,1}$',admin_reserverestore),
     ('^admin/switches/add/{0,1}$',admin_swadd),
     ('^admin/reserves/add/{0,1}$',admin_reserveadd),
-    ('^extended/{0,1}$',ext_map),
+    ('^extended/{0,1}$',TemplateView.as_view(template_name="extended.html")),
     ('^extended/([GDEJ]{1,1})/{0,1}$',ext_map_sector),
-    ('^faq/{0,1}$',faq)
+    ('^faq/{0,1}$',TemplateView.as_view(template_name="faq.html"))
 )

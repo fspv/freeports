@@ -80,7 +80,9 @@ for row in switches:
         # Форматирование ребра в зависимости от состояния линка
         edge.attr['fontsize'] = '8'
         edge.attr['fontcolor'] = '#0000ff'
-        edge.attr['label'] = str(row['parent_port'])+'-'+str(row['uplink_port'])
+        downlink_port = str(row['parent_port']) if row['parent_port'] else '??'
+        uplink_port = str(row['uplink_port']) if row['uplink_port'] else '??'
+        edge.attr['label'] = downlink_port + '-' + uplink_port
         if link_state == -1:
             edge.attr['style'] = 'dotted'
             edge.attr['color'] = 'red'

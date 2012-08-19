@@ -5,7 +5,8 @@ case "$1" in
         python2 manage.py runfcgi method=prefork host=127.0.0.1 port=8881 pidfile=/tmp/server.pid 
     ;;
     "stop") 
-        kill -9 `cat /tmp/server.pid` 
+        kill -9 `cat /tmp/server.pid`
+       rm /tmp/server.pid 
     ;;
     "restart")
         $0 stop

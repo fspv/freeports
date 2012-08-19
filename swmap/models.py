@@ -11,7 +11,7 @@ validate_sector_ru = RegexValidator(u'^[АБВГДЕЖ]{1,1}$',u'Неправи�
 validate_swname = RegexValidator('^[a-zA-Z0-9]*$',u'Неправильно указано название свитча, оно может состоять из латинских букв в любом регистре и цифр')
 validate_model = RegexValidator('^[a-zA-Z0-9 -/]*$',u'Неправильно указана модель свитча, это значение может состоять из латинских букв (в любом регистре), цифр, пробелов и символов "-", "/", "\\"')
 validate_room = RegexValidator('^[0-9]{3,4}$',u'Неправильно указан номер комнаты , он может состоять из 3х или 4х цифр')
-validate_name = RegexValidator(u'^[A-ZА-Я][a-zA-ZА-Яа-я \-\.]*$',u'Неправильно указано имя/фамилия/отчество, оно должно начинаться с большой буквы, и может состоять из русских и латинских букв в любом регистре, пробелов, и символов "." и "-"')
+validate_name = RegexValidator(u'^[A-ZА-Я][a-zA-ZА-ЯЁа-яё \-\.]*$',u'Неправильно указано имя/фамилия/отчество, оно должно начинаться с большой буквы, и может состоять из русских и латинских букв в любом регистре, пробелов, и символов "." и "-"')
 validate_comments_name = validate_name
 validate_phone = RegexValidator('^\+7[0-9]{10}$',u'Неправильно указан телефон, он должен иметь формат +79991234567, скобочки, тире и пробелы не допускаются')
 validate_username = RegexValidator('^[a-z]{1,1}[a-z0-9_-]{3,}$',u'Неправильно указано имя пользователя, выдержка из signup.local:  Это имя должно состоять из строчных латинских букв, цифр и подчёркиваний, быть не короче 4 символов и начинаться с буквы.')
@@ -49,6 +49,7 @@ class Comments(models.Model):
     time = models.CharField(max_length=50,blank=True, null=True)
     class Meta:
         db_table = 'comments'
+        ordering = ["-time"]
 class CommentsForm(ModelForm):
     #comment = forms.CharField(widget=forms.Textarea,required=True)
     class Meta:
@@ -58,7 +59,7 @@ class CommentsForm(ModelForm):
             'comment': Textarea(attrs={'cols': 80, 'rows': 20}),
         }
 def swchoise():
-    switches = Map.objects.filter(stupid=0).order_by("name")
+    switches = Map.objects.filter(stupid=0, deleted=0).order_by("name")
     choices = ((switches[0].sw,switches[0].name),)
     for switch in switches:
         if switch == switches[0]:
@@ -78,6 +79,7 @@ class Clients(models.Model):
     last_seen = models.PositiveIntegerField(verbose_name="Был в сети")
     class Meta:
         db_table = 'clients'
+        ordering = ["-last_seen"]
 class ClientsSearchForm(ModelForm):
     class Meta:
         model = Clients

@@ -1,3 +1,4 @@
+from BeautifulSoup import BeautifulSoup 
 class MultipleProxyMiddleware(object):
     FORWARDED_FOR_FIELDS = [
         'HTTP_X_FORWARDED_FOR',
@@ -15,3 +16,8 @@ class MultipleProxyMiddleware(object):
                 if ',' in request.META[field]:
                     parts = request.META[field].split(',')
                     request.META[field] = parts[-1].strip()
+class BeautifulSoupMiddleware:
+     def process_response(self, request, response):
+         new_content = BeautifulSoup(response.content).prettify()
+         response.content = new_content
+         return response

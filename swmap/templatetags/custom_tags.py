@@ -50,7 +50,7 @@ def gender(value):
 @register.filter
 def downlink(value,arg):
     try:
-        downlink = Map.objects.get(parent=value,parent_port=arg,deleted=0)
+        downlink = Map.objects.filter(parent=value,parent_port=arg,deleted=0)[0]
         return downlink.sw
     except:
         return False

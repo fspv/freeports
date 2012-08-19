@@ -1,11 +1,14 @@
 # Django settings for freeports project.
 
-DEBUG = True
+#DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Safronov Pavel', 'pv.safronov@gmail.com'),
 )
+
+INTERNAL_IPS = ('89.249.172.184',)
 
 MANAGERS = ADMINS
 
@@ -93,12 +96,14 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    #'freeports.swmap.middleware.BeautifulSoupMiddleware',
     'freeports.swmap.middleware.MultipleProxyMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'freeports.urls'
@@ -118,6 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'freeports.swmap',
+    'debug_toolbar',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

@@ -2,8 +2,8 @@
 {% load custom_tags %}
 {% block level2 %}
 <div id="subnavigation">
-    <li><a href="{{ request.path }}?registered=1&period={{ period }}">Registered</a></li>
-    <li><a href="{{ request.path }}?registered=0&period={{ period }}">Unregistered</a></li>
+    <li{% block reg_act %}{% endblock %}><a href="{{ request.path }}?registered=1&period={{ period }}">Registered</a></li>
+    <li{% block unreg_act %}{% endblock %}><a href="{{ request.path }}?registered=0&period={{ period }}">Unregistered</a></li>
 </div>
 {% endblock %}
 {% block table %}

@@ -1,19 +1,21 @@
 {% extends "switch.html" %}
 {% load custom_tags %}
-{% block level1 %}<li>&rarr; <a href="/switch-{{ swid }}/">Switch {{ swid|getSwNameByID }}</a></li>{% endblock %}
-{% block level2 %}<li>&rarr; <a href="/switch-{{ swid }}/comments/">Comments</a></li>{% endblock %}
+{% block title1 %}::{{ switch_id|getSwNameByID }}{% endblock %}
+{% block title2 %}::Comments::Edit{% endblock %}
+{% block level1 %}<li>&rarr; <a href="/switch-{{ switch_id }}/">Switch {{ switch_id|getSwNameByID }}</a></li>{% endblock %}
+{% block level2 %}<li>&rarr; <a href="/switch-{{ switch_id }}/comments/">Comments</a></li>{% endblock %}
 {% block level3 %}<li id="current">&rarr; Add</li>{% endblock %}
 {% block comments %}Comments{% endblock %}
 {% block content %}
 <div id="content">
 <div id="edit">
-    <form action="/switch-{{ swid }}/comments/{{ commid }}/edit/" name="comments" method="POST">{% csrf_token %}
-    <input id="id_name" type="hidden" name="id" value="{{ commid }}" maxlength="50" />
+    <form action="/switch-{{ switch_id }}/comments/{{ comment_id }}/edit/" name="comments" method="POST">{% csrf_token %}
+    <input id="id_name" type="hidden" name="id" value="{{ comment_id }}" maxlength="50" />
     <table>
     <tbody>
     <tr><th class="delimiter" colspan="2">Edit comment</th></tr>
     
-    {% for field in comment_form %}
+    {% for field in form %}
         <tr>
             <th>
                 {{ field.label_tag }}:

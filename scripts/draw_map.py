@@ -133,7 +133,7 @@ for sector in ['G','D','E','J']:
     db.execute('SELECT sw,name,stupid,sector,room,parent,parent_port,uplink_port FROM map WHERE deleted=0 and sector=\''+sector+'\';')
     #print net[1]
     G = pgv.AGraph(name=sector,splines="true",rotation="180")
-    print G
+    #print G
     for room in net[0]:
         G.add_node(room[0])
         node = G.get_node(room[0])
@@ -158,7 +158,7 @@ for sector in ['G','D','E','J']:
         G = temp['G']
         positions = temp['positions']
         additional = temp['additional']
-        db.execute('SELECT * FROM map WHERE sw='+str(switch['parent']))
+        db.execute('SELECT * FROM map WHERE sw=\'' + str(switch['parent'])+'\'')
         switch = db.fetchall()[0]
         temp = position_node(G,switch,positions,additional,1)
         G = temp['G']

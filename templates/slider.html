@@ -11,32 +11,3 @@
     <div style="clear:both"></div>
 <form>
 </div>
-
-
-
-
-<!--<div id="slider">
-<p>
-    <form method="GET" action="" id="chooseperiod">
-        <input type="range" id="periodslider" min="0" max="365" step="1" value="{{period}}" onchange="changeTime()">
-        <input type="text" name="period" size="3" maxlength="3" onchange="changeTime2()"> days, 
-        ~<span id="monthsapprox"></span> months
-        <input type="hidden" name="registered" value="{{ registered }}">
-        <input type="submit" value="Show">
-    </form>
-</p>
-<script>
-function changeTime() {
-    size = document.getElementById("periodslider").value;
-    oFormObject = document.forms['chooseperiod'];
-    daysTextField = oFormObject.elements["period"];
-    daysTextField.value = size;
-    document.getElementById("monthsapprox").innerHTML = Math.round(size/30-size%30/30);
-}
-function changeTime2() {
-    oFormObject = document.forms['chooseperiod'];
-    daysTextField = oFormObject.elements["period"].value;
-    document.getElementById("periodslider").value = daysTextField;
-}
-</script>
-</div>-->

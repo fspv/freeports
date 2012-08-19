@@ -15,7 +15,7 @@ try:
     passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
     passman.add_password(None, config.swmap_location, config.swmap_username, config.swmap_password)
     urllib2.install_opener(urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman)))
-    downloaded = urllib2.urlopen(config.swmap_location + "map/swmap.html")
+    downloaded = urllib2.urlopen("http://phoenix.masterbit.su/map/swmap.html")
 except:
     print("Can't download main page")
     exit(1)
@@ -25,12 +25,14 @@ with warnings.catch_warnings():
     parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("beautifulsoup"))
     swmap = parser.parse(downloaded.read())
     areas = swmap.findAll(name = "area") #finding all <area> tags in downloaded page
+#print areas
 print "Connecting to MySQL"
 try:
     conn = MySQLdb.connect(host = config.mysql_host,user = config.mysql_user,passwd = config.mysql_pass,db = config.mysql_dbname)
 except:
     print "Can't connect to MySQL"
     exit(1)
+print "mysql connected"
 db = conn.cursor()
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -63,10 +65,21 @@ with warnings.catch_warnings():
 						last_seen SMALLINT UNSIGNED\
 	    );')
     conn.commit()
+try:
+    db.execute('DROP INDEX sw ON clients;')
+    db.execute('DROP INDEX port ON clients;')
+    db.execute('DROP INDEX username ON clients;')
+    db.execute('DROP INDEX last_seen ON clients;')
+    db.execute('DROP INDEX room_sector ON clients;')
+    db.execute('DROP INDEX ip ON clients;')
+    db.execute('DROP INDEX mac ON clients;')
+    conn.commit()
+except:
+    print "Not all keys exists or we can't delete some case because of some strange things"
 print "Initializing variables and regexps"
 # for showing the progress
 count = len(areas)
-current = 1 
+current = 1
 #
 re1 = re.compile('^[GDEJBV]')
 re2 = re.compile('[0-9]{1,4}')
@@ -90,16 +103,22 @@ for i in areas:
     conn.commit()
     # starting of updating this switch (K.O)
     try:
-        update_switch.update(i['href'],sw)
+        update_switch.update(i['href'], sw)
     except:
         print "Switch update failed"
+        print "Unexpected error:", sys.exc_info()[0]
+db.execute('CREATE INDEX sw ON clients (sw,port,username(25),last_seen);')
+db.execute('CREATE INDEX port ON clients (port);')
+db.execute('CREATE INDEX username ON clients (username(25));')
+db.execute('CREATE INDEX last_seen ON clients (last_seen);')
+db.execute('CREATE INDEX room_sector ON clients (room(5),sector(1));')
+db.execute('CREATE INDEX ip ON clients (ip(25));')
+db.execute('CREATE INDEX mac ON clients (mac(35));')
 conn.commit()
 # Adding index for faster search
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    db.execute('ALTER TABLE clients DROP INDEX i_name;')
-    db.execute('ALTER TABLE clients ADD INDEX i_name (sw, port);')
-    conn.commit()
+#with warnings.catch_warnings():
+#    warnings.simplefilter("ignore")
+#    conn.commit()
 db.close()
 conn.close()
 print (-begin+time())/60

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load custom_tags %}
 {% block level1 %}<li id="current">&rarr; Switch {{ switch.name }}</li>{% endblock %}
+{% block title1 %}::{{ switch.name }}{% endblock %}
 {% block menu %}
 <ul>
     <li{% block info_act %}{% endblock %}>
