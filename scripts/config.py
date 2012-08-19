@@ -9,7 +9,7 @@ mysql_pass = "12345"
 mysql_dbname = "swmap_test"
 # System paths ("/" at the end of path necessary!)
 tmp_dir = "/tmp/swmap/"
-map_dir = "/home/testprojects/freeports/"
+map_dir = "/home/djangoprojects/freeports/"
 # Website URL
 website_location = "/"
 # Debug
