@@ -34,43 +34,9 @@ except:
     exit(1)
 print "mysql connected"
 db = conn.cursor()
-<<<<<<< HEAD
 print "Deleting keys"
 db.execute('ALTER TABLE clients DISABLE KEYS;')
 conn.commit()
-=======
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    db.execute('CREATE TABLE IF NOT EXISTS map(\
-					    sw SMALLINT UNSIGNED PRIMARY KEY,\
-					    name TINYTEXT,\
-					    stupid SMALLINT(1),\
-					    model TINYTEXT,\
-					    sector TINYTEXT,\
-					    room SMALLINT UNSIGNED,\
-					    side TINYTEXT,\
-					    parent SMALLINT UNSIGNED,\
-					    parent_port SMALLINT(2) UNSIGNED,\
-					    ports_count SMALLINT(2) UNSIGNED,\
-					    uplink_port SMALLINT(2) UNSIGNED,\
-					    ip TINYTEXT,\
-					    updated TINYTEXT,\
-					    deleted SMALLINT(1),\
-                        state SMALLINT\
-	    );')
-    db.execute('CREATE TABLE IF NOT EXISTS clients(\
-						id INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,\
-						sw SMALLINT UNSIGNED,\
-						username TINYTEXT,\
-						sector TINYTEXT,\
-						room TINYTEXT,\
-						ip TINYTEXT,\
-						mac TINYTEXT,\
-						port SMALLINT UNSIGNED,\
-						last_seen SMALLINT UNSIGNED\
-	    );')
-    conn.commit()
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 try:
     db.execute('DROP INDEX sw ON clients;')
     db.execute('DROP INDEX port ON clients;')
@@ -99,17 +65,12 @@ for i in areas:
     current += 1
     #getting switch parameters
     sw = str(re.findall(re.compile('[0-9]*$'),i['href'])[0])
-<<<<<<< HEAD
     sector = str(re.findall(re1,i['title'])[0]) if len(re.findall(re1,i['title'])) == 1 else ""
-=======
-    sector = str(re.findall(re1,i['title'])[0]) if len(re.findall(re1,i['title'])) == 1 else "NULL"
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
     room = str(re.findall(re2,i['title'])[0]) if len(re.findall(re2,i['title'])) == 1 else "999"
     side = str(re.findall(re3,i['title'])[0]) if len(re.findall(re3,i['title'])) == 1 else "NULL"
     stupid = "0"
     deleted = "0"
     # insert on duplicate update (K.O)
-<<<<<<< HEAD
     query = 'INSERT INTO map(sw,name,stupid,sector,room,side,deleted) ' + \
                 'VALUES(\'' + \
                         sw + '\', \'' + \
@@ -130,9 +91,6 @@ for i in areas:
         print query
 
     db.execute(query)
-=======
-    db.execute('INSERT INTO map(sw,name,stupid,sector,room,side,deleted) VALUES(\''+sw+'\',name=\''+str(i['title'])+'\',\''+stupid+'\',\''+sector+'\',\''+room+'\',\''+side+'\',\''+deleted+'\') ON DUPLICATE KEY UPDATE name=\''+str(i['title'])+'\',stupid=\''+stupid+'\',sector=\''+sector+'\',room=\''+room+'\',deleted=\''+deleted+'\';')
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
     conn.commit()
     # starting of updating this switch (K.O)
     try:
@@ -140,27 +98,19 @@ for i in areas:
     except:
         print "Switch update failed"
         print "Unexpected error:", sys.exc_info()[0]
-<<<<<<< HEAD
 
 db.execute('ALTER TABLE clients ENABLE KEYS;')
 db.execute('SET autocommit=1;')
 db.execute('SET unique_checks=1;')
 db.execute('SET foreign_key_checks=1;')
 conn.commit()
-=======
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 db.execute('CREATE INDEX sw ON clients (sw,port,username(25),last_seen);')
 db.execute('CREATE INDEX port ON clients (port);')
 db.execute('CREATE INDEX username ON clients (username(25));')
 db.execute('CREATE INDEX last_seen ON clients (last_seen);')
 db.execute('CREATE INDEX room_sector ON clients (room(5),sector(1));')
-<<<<<<< HEAD
 db.execute('CREATE INDEX ip ON clients (ip(15));')
 db.execute('CREATE INDEX mac ON clients (mac(17));')
-=======
-db.execute('CREATE INDEX ip ON clients (ip(25));')
-db.execute('CREATE INDEX mac ON clients (mac(35));')
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 conn.commit()
 # Adding index for faster search
 #with warnings.catch_warnings():

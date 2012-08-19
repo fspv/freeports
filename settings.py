@@ -1,12 +1,7 @@
 # Django settings for freeports project.
 
-<<<<<<< HEAD
 DEBUG = True
 #DEBUG = False
-=======
-#DEBUG = True
-DEBUG = False
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -16,7 +11,6 @@ ADMINS = (
 INTERNAL_IPS = ('89.249.172.184',)
 
 MANAGERS = ADMINS
-<<<<<<< HEAD
 STORAGE_ENGINE = 'MYISAM'
 DATABASE_STORAGE_ENGINE = 'MYISAM'
 DATABASES = {
@@ -31,17 +25,6 @@ DATABASES = {
         'OPTIONS': {
             'init_command': 'SET storage_engine=MYISAM;',
         }
-=======
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'swmap2',                      # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '******',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
     }
 }
 
@@ -81,19 +64,11 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-<<<<<<< HEAD
 STATIC_ROOT = '/home/testprojects/freeports/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/'
-=======
-STATIC_ROOT = '/home/djprogects/freeports/static/'
-
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
@@ -142,11 +117,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-<<<<<<< HEAD
     '/home/testprojects/freeports/templates',
-=======
-    '/home/djprogects/freeports/templates',
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 )
 
 INSTALLED_APPS = (
@@ -156,13 +127,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
     'swmap',
     #'debug_toolbar',
-=======
-    'freeports.swmap',
-    'debug_toolbar',
->>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
