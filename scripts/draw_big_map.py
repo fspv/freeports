@@ -95,6 +95,7 @@ for row in switches:
         elif link_state == 1000:
             edge.attr['style'] = 'bold'
         if str(link_state) != str(row['state']):
+<<<<<<< HEAD
             if(config.DEBUG):
                 print 'UPDATE map SET state='+str(link_state)+' WHERE sw='+str(row['sw'])+';'
             db.execute('UPDATE map SET state='+str(link_state)+' WHERE sw='+str(row['sw'])+';')
@@ -103,6 +104,13 @@ for row in switches:
             #    os.system('python2 ' + config.map_dir + \
             #           'scripts/google-sms.py --title="Состояние линка до ' + row['name'] + \
             #            ' изменилось на '+states[str(link_state)]+'" --location="Аплинк на свитче '+row['name']+'"')
+=======
+            print 'UPDATE map SET state='+str(link_state)+' WHERE sw='+str(row['sw'])+';'
+            db.execute('UPDATE map SET state='+str(link_state)+' WHERE sw='+str(row['sw'])+';')
+            conn.commit()
+            if str(row['stupid'])=='1':
+                os.system('python2 '+config.map_dir+'scripts/google-sms.py --title="Link '+states[str(link_state)]+'" --location="Uplink at '+row['name']+'"')
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 for reserve in reserves:
     G.add_edge(reserve['sw1'],reserve['sw2'])
     edge = G.get_edge(reserve['sw1'],reserve['sw2'])

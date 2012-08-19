@@ -18,6 +18,18 @@ conn = MySQLdb.connect(\
                 db = config.mysql_dbname\
 )
 db = conn.cursor()
+<<<<<<< HEAD
+=======
+# if this is first use of this script
+db.execute('CREATE TABLE IF NOT EXISTS current(\
+		    id BIGINT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,\
+		    sw SMALLINT UNSIGNED,\
+		    port SMALLINT UNSIGNED,\
+		    port_state SMALLINT,\
+		    updated TINYTEXT\
+	    );')
+conn.commit()
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 db.execute('SELECT sw FROM map WHERE stupid=0 and deleted=0;')
 raws = db.fetchall()
 # initializing parameters needed to download map pages

@@ -2,7 +2,10 @@
 import lxml
 import lxml.html
 import config
+<<<<<<< HEAD
 from config import DEBUG
+=======
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 import urllib2
 import MySQLdb
 import re
@@ -25,7 +28,11 @@ re_info = re.compile(
                 'Коммутатор (?P<swname>.*) - это '
                 '(?P<portcount>[0-9]{1,2})-портовый '
                 'коммутатор (?P<model>.*), который стоит '
+<<<<<<< HEAD
                 'в (?P<room>.*). Аплинк включен в '
+=======
+                'в Е-706. Аплинк включен в '
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
                 '(?P<uplink>[0-9]{1,2}) порт.')
 re_table_begin = re.compile(r"<table.*>")
 re_table_end = re.compile(r"</table>")
@@ -72,6 +79,13 @@ def update(sw_url, sw, mode='all'):
         print "Can't open file"
         raise
     try:
+<<<<<<< HEAD
+=======
+        #loaded_read = loaded.read()
+        #os.remove(filename)
+        #loaded = ''
+        #re.match(loaded_read, re_table)
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
         try:
             conn = MySQLdb.connect(
                     host=config.mysql_host,
@@ -96,7 +110,11 @@ def update(sw_url, sw, mode='all'):
         tables_counter = 0
         write_to_table = 0
         first_line = 0
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
         for line in loaded:
             """
                 Построчно читаем файл и думаем, что с этим делать :)
@@ -135,12 +153,18 @@ def update(sw_url, sw, mode='all'):
                                     sw+'\',parent_port=\'' + \
                                     link.group('port') + '\'WHERE sw=\'' + \
                                     link.group('swid') + '\';'
+<<<<<<< HEAD
                         if(DEBUG):
                             print query
 
                         db.execute(query)
 
                 if(tables_counter == 2 and None):
+=======
+                        db.execute(query)
+
+                if(tables_counter == 2):
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
                     """ Основная таблица с юзерами """
                     unreg = re.match(re_unreg, line)
                     if(unreg):
@@ -196,6 +220,7 @@ def update(sw_url, sw, mode='all'):
                                 info.group('portcount') + '\',model=\'' + \
                                 info.group('model') + '\' WHERE sw=' + \
                                 sw + ';'
+<<<<<<< HEAD
                         if(DEBUG):
                             print query
                         db.execute(query)
@@ -209,6 +234,20 @@ def update(sw_url, sw, mode='all'):
         conn.commit()
 
         db.execute('UPDATE map SET updated=\''+str(time.time())+'\',deleted=\'0\' WHERE sw=\''+sw+'\';')
+=======
+                        db.execute(query)
+                    if(ip):
+                        query = 'UPDATE map SET ip=\'' + ip.group('ip') + '\' WHERE sw=' + sw + ';'
+                        db.execute(query)
+                    conn.commit()
+        
+        conn.commit()
+        
+        db.execute('UPDATE map SET updated=\''+str(time.time())+'\',deleted=\'0\' WHERE sw=\''+sw+'\';')
+        db.execute('SET autocommit=1;')
+        db.execute('SET unique_checks=1;')
+        db.execute('SET foreign_key_checks=1;')
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
 
         conn.commit()
         try:
@@ -223,3 +262,117 @@ if(len(sys.argv)>1):
     print sys.argv[1]
     update(sys.argv[1], sys.argv[2])
 
+<<<<<<< HEAD
+=======
+#def update2(sw_url, sw, mode='all'):
+#    """try:
+#        passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+#        passman.add_password(None, config.swmap_location, config.swmap_username, config.swmap_password)
+#        urllib2.install_opener(urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman)))
+#        tmp = '&show=all' if mode!='swonly' else ''
+#        loaded = urllib2.urlopen(config.swmap_location + sw_url + tmp)
+#        #print filename
+#        #print headers
+#    except:
+#        print "Can't load switch page"
+#        raise
+#    """
+#    filename = '/tmp/swmap/switch'
+#    try:
+#        tmp = '&show=all' if mode!='swonly' else ''
+#        url = str(config.swmap_location) + str(sw_url) + str(tmp)
+#        try:
+#            os.remove(filename)
+#        except:
+#            pass
+#        subprocess.call(['wget', '-T', '300', '-O', filename, '--user=' + config.swmap_username, '--http-passwd=' + config.swmap_password, url])
+#    except:
+#        print "Can't load file"
+#        raise
+#    try:
+#        loaded = open(filename, 'r')
+#    except:
+#        print "Can't open file"
+#        raise
+#    """
+#    try:
+#        br = mechanize.Browser()
+#        br.add_password(config.swmap_location, config.swmap_username, config.swmap_password)
+#        tmp = '&show=all' if mode!='swonly' else ''
+#        print config.swmap_location + sw_url + tmp
+#        loaded = br.open(config.swmap_location + sw_url + tmp)
+#    except:
+#        print "Can't load switch page"
+#        raise
+#    """
+#    try:
+#        conn=MySQLdb.connect(host=config.mysql_host,user=config.mysql_user,passwd=config.mysql_pass,db=config.mysql_dbname)
+#    except:
+#        print "Can't connect to MySQL"
+#        raise
+#    db = conn.cursor()
+#    if(mode != 'swonly'):
+#        db.execute('DELETE FROM clients WHERE sw=\''+sw+'\';')
+#    conn.commit()
+#
+#    try:
+#        loaded_read = loaded.read()
+#        os.remove(filename)
+#        loaded = ''
+#        # fixing the invalid html on switch page
+#        loaded_read = re_tablefix.sub('</tr>\n<tr><td',loaded_read)
+#        loaded_read = re_td_cut_unused.sub('<td>',loaded_read)
+#        switch = lxml.html.document_fromstring(loaded_read)
+#        # getting all tables from html page
+#        tables = switch.xpath("//body/table")
+#        switch = ''
+#        tables=tables[1:(len(tables)-1)] # we need all tables except first and last
+#        # getting swith parameters from switch page
+#        uplink = re.findall(re_uplink,loaded_read)[0]
+#        ports_count = re.findall(re_ports_count,loaded_read)[0]
+#        model = re.findall(re_title,loaded_read)[0]
+#        ip = re.findall(re_ip,loaded_read)[0]
+#        loaded_read = ''
+#        try:
+#            os.remove(filename)
+#        except:
+#            pass
+#    except:
+#        print "Error, parsing switch page"
+#        raise
+#    # updating database (K.O.)
+#    print uplink, ports_count, model, ip
+#    db.execute('UPDATE map SET uplink_port=\''+uplink+'\',ports_count=\''+ports_count+'\',model=\''+model+'\',ip=\''+ip+'\' WHERE sw='+sw+';')
+#    conn.commit()
+#    if(True): ## i'm so lazy, i won't to del tabs to get rid of this statement
+#        for table in tables:
+#            rows = table.xpath("./tr")
+#            rows.pop(0)
+#            i = 0
+#            while i < len(rows):
+#                it = rows[0]
+#                cols = it.xpath("./td")
+#                isswitch = len(cols[0].xpath("./a"))
+#                if (cols[0].text_content() == 'Unregistered'):
+#                    tmp = re.findall(re_last_seen,str(cols[4].text_content()))
+#                    last_seen = str(tmp[0]) if tmp else "0"
+#                    query='INSERT INTO clients(sw,mac,port,last_seen) VALUES(\''+sw+'\',\''+cols[1].text_content()+'\',\''+cols[2].text_content()+'\',\''+last_seen+'\');'
+#                    #print query
+#                    db.execute(query)
+#                elif isswitch:
+#                    query = 'UPDATE map SET parent=\''+sw+'\',parent_port=\''+cols[4].text_content()+'\'WHERE sw=\''+re.findall(re_switch,str(cols[0].xpath("./a")[0].get('href')))[0]+'\''
+#                    #print query
+#                    db.execute(query)
+#                else:
+#                    tmp = re.findall(re_last_seen,str(cols[7].text_content()))
+#                    last_seen = str(tmp[0]) if tmp else "0"
+#                    query = 'INSERT INTO clients(sw,username,sector,room,ip,mac,port,last_seen) VALUES(\'' + sw + '\',\'' + cols[0].text_content() + '\',\'' + cols[1].text_content() + '\',\'' + cols[2].text_content() + '\',\'' + cols[3].text_content() + '\',\'' + cols[4].text_content() + '\',\'' + cols[5].text_content() + '\',\'' + last_seen + '\');'
+#                    #print query
+#                    db.execute(query)
+#                rows.pop(0)
+#                #conn.commit()
+#            db.execute('UPDATE map SET updated=\''+str(time.time())+'\',deleted=\'0\' WHERE sw=\''+sw+'\';')
+#            conn.commit()
+#    db.close()
+##    conn.close()
+>>>>>>> ed587351429901d440c5f2ddc4c716fff5466c81
