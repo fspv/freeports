@@ -47,10 +47,9 @@ validate_username = RegexValidator(
 validate_hostname = RegexValidator(
 						'^[a-z0-9-]{3,}$',
 						u'Имя хоста может состоять из латинских букв, в нижнем '
-						'регистре, цифр и тире. Должно быть указано как минимум 3 символа.')
+                        u'регистре, цифр и тире. Должно быть указано как минимум 3 символа.')
 validate_ip = RegexValidator(
-						"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)'
-						'{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+						"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
 						u'Неправильный формат ip-адреса. Пример: 127.0.0.1')
 validate_mac = RegexValidator(
 						'([a-fA-F0-9]{2}[:]?){6}',
@@ -226,15 +225,11 @@ class Clients(models.Model):
 class ClientsSearchForm(ModelForm):
     class Meta:
         model = Clients
-        fields = (	'username',
-					'sector',
-					'room',
-					'ip',
-					'mac',)
+        fields = (	'username','sector','room','ip','mac',)
 
 
 class Current(models.Model):
-	sw = models.PositiveSmallIntegerField()
+    sw = models.PositiveSmallIntegerField()
     port = models.PositiveSmallIntegerField()
     port_state = models.SmallIntegerField()
     updated = models.CharField(max_length=50)
@@ -283,8 +278,13 @@ class Contacts(models.Model):
                         max_length=500,
                         blank=True, null=True,
                         verbose_name="Комментарий")
+    
     class Meta:
         db_table = 'contacts'
+    
+    class Admin:
+        pass
+
 
 class ContactsForm(ModelForm):
     #comment = forms.CharField(widget=forms.Textarea,required=False)
