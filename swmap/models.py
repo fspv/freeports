@@ -44,10 +44,19 @@ validate_username = RegexValidator(
                         u'signup.local:  Это имя должно состоять из строчных '
                         u'латинских букв, цифр и подчёркиваний, быть не короче '
                         u'4 символов и начинаться с буквы.')
-validate_hostname = RegexValidator('^[a-z0-9-]{3,}$',u'Имя хоста может состоять из латинских букв, в нижнем регистре, цифр и тире. Должно быть указано как минимум 3 символа.')
-validate_ip = RegexValidator("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",u'Неправильный формат ip-адреса. Пример: 127.0.0.1')
-validate_mac = RegexValidator('([a-fA-F0-9]{2}[:]?){6}',u'Неправильный формат mac-адреса. Пример: 9e:ed:34:5d:30:34')
-validate_port = RegexValidator('^[1-9][0-9]{0,1}$',u'Номер порта - это 1 или 2 цифры. Номер порта не может начинаться с нуля')
+validate_hostname = RegexValidator(
+						'^[a-z0-9-]{3,}$',
+						u'Имя хоста может состоять из латинских букв, в нижнем '
+                        u'регистре, цифр и тире. Должно быть указано как минимум 3 символа.')
+validate_ip = RegexValidator(
+						"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+						u'Неправильный формат ip-адреса. Пример: 127.0.0.1')
+validate_mac = RegexValidator(
+						'([a-fA-F0-9]{2}[:]?){6}',
+						u'Неправильный формат mac-адреса. Пример: 9e:ed:34:5d:30:34')
+validate_port = RegexValidator(
+						'^[1-9][0-9]{0,1}$',
+						u'Номер порта - это 1 или 2 цифры. Номер порта не может начинаться с нуля')
 def ports_number():
     choices = ((2,2),)
     for i in [5,8,12,16,20,22,24,26,28,44,48]:
@@ -168,15 +177,15 @@ class CommentsForm(ModelForm):
             'comment': Textarea(attrs={'cols': 80, 'rows': 20}),
         }
 def swchoise():
-    #switches = Map.objects.filter(stupid=0, deleted=0).order_by("name")
-    #choices = ((switches[0].sw,switches[0].name),)
-    #for switch in switches:
-    #    if switch == switches[0]:
-    #        pass
-    #    else:
-    #       choices = choices+((switch.sw,switch.name),)
-    #return choices
-    return ((0,0),)
+    switches = Map.objects.filter(stupid=0, deleted=0).order_by("name")
+    choices = ((switches[0].sw,switches[0].name),)
+    for switch in switches:
+        if switch == switches[0]:
+            pass
+        else:
+           choices = choices+((switch.sw,switch.name),)
+    return choices
+    #return ((0,0),)
 
 class Clients(models.Model):
     #id = models.PositiveIntegerField(primary_key=True)
@@ -211,18 +220,23 @@ class Clients(models.Model):
     class Meta:
         db_table = 'clients'
         ordering = ["-last_seen"]
+
+
 class ClientsSearchForm(ModelForm):
     class Meta:
         model = Clients
-        fields = ('username','sector','room','ip','mac',)
+        fields = (	'username','sector','room','ip','mac',)
+
+
 class Current(models.Model):
     sw = models.PositiveSmallIntegerField()
     port = models.PositiveSmallIntegerField()
     port_state = models.SmallIntegerField()
-    updated = models.CharField(
-                        max_length=50)
+    updated = models.CharField(max_length=50)
     class Meta:
         db_table = 'current'
+
+
 class Contacts(models.Model):
     sw = models.PositiveSmallIntegerField(
                         primary_key=True)
@@ -264,8 +278,13 @@ class Contacts(models.Model):
                         max_length=500,
                         blank=True, null=True,
                         verbose_name="Комментарий")
+    
     class Meta:
         db_table = 'contacts'
+    
+    class Admin:
+        pass
+
 
 class ContactsForm(ModelForm):
     #comment = forms.CharField(widget=forms.Textarea,required=False)
@@ -275,6 +294,8 @@ class ContactsForm(ModelForm):
         widgets = {
             'comment': Textarea(attrs={'cols': 50, 'rows': 10}),
         }
+
+
 def ports_choise(swid=0,includeempty=1):
     ports_count = 0
     if swid == 0:
@@ -317,10 +338,14 @@ class Reserves(models.Model):
     deleted = models.PositiveIntegerField()
     class Meta:
         db_table = 'reserves'
+
+
 class ReservesForm(ModelForm):
     class Meta:
         model = Reserves
         exclude = ('deleted',)
+
+
 class StupidMapForm(ModelForm):
     parent = forms.CharField(max_length=12,widget=forms.Select(choices=swchoise()),required=False)
     def __init__(self, *args, **kwargs):
@@ -334,6 +359,8 @@ class StupidMapForm(ModelForm):
     class Meta:
         model = Map
         exclude = ("sw","stupid","ip","updated","deleted",)
+
+
 class AddStupidMapForm(ModelForm):
     parent = forms.CharField(max_length=12,widget=forms.Select(choices=swchoise()),required=False)
     def __init__(self, *args, **kwargs):
@@ -347,6 +374,8 @@ class AddStupidMapForm(ModelForm):
     class Meta:
         model = Map
         exclude = ("sw","stupid","ip","updated","deleted",)
+
+
 class SmartMapForm(ModelForm):
     #side = forms.CharField(max_length=2,widget=forms.Select(choices=(('l','left'),('r','right'))),required=False)
     class Meta:
