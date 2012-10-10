@@ -234,3 +234,7 @@ td.no_reg_macs {
 div#comments_container {
     margin: 0 auto;
 }
+div#links {
+    width: 100%;
+    padding: 15px;
+}
