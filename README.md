@@ -1,6 +1,6 @@
 # MSU network map for support engineers
 
-This is my first python project. The static html dump of the project is available [here](https://swmap-msu.s3.amazonaws.com/index.html) (all the dynamic features, like comments, etc. won't work).
+This is my first python project. The static html dump of the project is available [here](http://swmap-msu.s3-website-us-east-1.amazonaws.com/) (all the dynamic features, like comments, etc. won't work).
 
 ![Selection_329](https://user-images.githubusercontent.com/1616237/137812505-8958407e-96a0-4161-ad2f-990fa2f03c9a.png)
 
