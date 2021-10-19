@@ -12,8 +12,8 @@ Support engineer responsibilities were the following:
 
 * Connect new clients to the network.
 * Fix problems with existing clients.
-* Debug and fix global network problems (such as network storms caused by loops, network equipment randomly turned off, the cable being cut, and much more).
-* Build a new network on top of the existing network topology. (Addition information, like backup links, is needed)
+* Debug and fix global network problems (such as network storms caused by the network loops, network equipment randomly turned off, the cable being cut, and much more).
+* Build a new network on top of the existing network topology.
 
 Back then, the MSU network was built in a very non-reliable way, so problems arose here and there, and support engineers were firefighting all the time. It was tough to debug what was going on. There were some tools provided by those who built the network, but it was definitely not enough.
 
@@ -22,6 +22,7 @@ There was a need to:
 * See what client has been connected to the switch and filter those clients by the last connected date. This helped the network engineer locate the client and tell if they could use switch ports for other purposes.
 * As some network switches were not "smart" (meaning there was no interface to monitor them), there was a need to have at least indirect visibility over their health.
 * All the network equipment was located in the dormitory rooms with actual people living there. So there was a need to keep track of who lives where and how to access the equipment.
+* Store additional information about the topology, such as the backup links.
 
 Those were the primary sources of pain and toil. So this project aimed to solve those issues and make support engineer lives easier in general.
 
